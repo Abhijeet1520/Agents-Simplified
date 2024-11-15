@@ -14,20 +14,38 @@ class OneInchClient:
             network_id (int): The network ID (1 for Ethereum mainnet).
         """
         self.network_id = network_id
-        self.base_url = f"https://fusion.1inch.io"
-        self.api_version = "v1.0"
+        self.base_url = f"https://api.1inch.dev/swap/v5.2"
+        self.api_version = "v5.2"
         self.w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URL")))
+
+        # Retrieve the 1inch API key from the environment variable
+        self.api_key = os.getenv("ONEINCH_API_KEY")
+        if not self.api_key:
+            raise ValueError("ONEINCH_API_KEY environment variable not set.")
 
         if private_key:
             self.account = Account.from_key(private_key)
             self.private_key = private_key
         else:
             # Generate a new account if no private key is provided
-            self.account, self.private_key = Account.create_with_mnemonic()
+            self.account, self.private_key = Account.create_with_private_key()
+
+    def _get_headers(self) -> Dict[str, str]:
+        """
+        Internal method to get the headers for API requests, including the API key.
+
+        Returns:
+            Dict[str, str]: Headers dictionary.
+        """
+        return {
+            "accept": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
 
     def swap_tokens(self, from_token: str, to_token: str, amount: int, recipient: Optional[str] = None, slippage: float = 1.0) -> Dict[str, Any]:
         """
-        Swap tokens using the 1inch Fusion Plus API.
+        Swap tokens using the 1inch API.
 
         Args:
             from_token (str): The address of the token to swap from.
@@ -43,7 +61,7 @@ class OneInchClient:
             recipient = self.account.address
 
         # Prepare the request payload
-        url = f"{self.base_url}/{self.api_version}/{self.network_id}/swap"
+        url = f"{self.base_url}/{self.network_id}/swap"
         params = {
             "fromTokenAddress": from_token,
             "toTokenAddress": to_token,
@@ -54,8 +72,10 @@ class OneInchClient:
             "disableEstimate": "true"
         }
 
-        # Fetch the swap data from the Fusion Plus API
-        response = requests.get(url, params=params)
+        headers = self._get_headers()
+
+        # Fetch the swap data from the 1inch API
+        response = requests.get(url, params=params, headers=headers)
         if response.status_code == 200:
             data = response.json()
 
@@ -73,7 +93,7 @@ class OneInchClient:
 
     def get_quote(self, from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
         """
-        Get a price quote for swapping tokens from the Fusion Plus API.
+        Get a price quote for swapping tokens from the 1inch API.
 
         Args:
             from_token (str): The address of the token to swap from.
@@ -83,13 +103,16 @@ class OneInchClient:
         Returns:
             Dict[str, Any]: Quote details or error information.
         """
-        url = f"{self.base_url}/{self.api_version}/{self.network_id}/quote"
+        url = f"{self.base_url}/{self.network_id}/quote"
         params = {
             "fromTokenAddress": from_token,
             "toTokenAddress": to_token,
             "amount": str(amount)
         }
-        response = requests.get(url, params=params)
+
+        headers = self._get_headers()
+
+        response = requests.get(url, params=params, headers=headers)
         if response.status_code == 200:
             return response.json()
         else:
@@ -97,13 +120,16 @@ class OneInchClient:
 
     def fetch_active_orders(self) -> Dict[str, Any]:
         """
-        Fetch active orders using the Fusion Plus API.
+        Fetch active orders using the 1inch API.
 
         Returns:
             Dict[str, Any]: Active orders or error information.
         """
-        url = f"{self.base_url}/{self.api_version}/{self.network_id}/orders/address/{self.account.address}"
-        response = requests.get(url)
+        url = f"{self.base_url}/{self.network_id}/orders/address/{self.account.address}"
+
+        headers = self._get_headers()
+
+        response = requests.get(url, headers=headers)
         if response.status_code == 200:
             return response.json()
         else:
@@ -111,7 +137,7 @@ class OneInchClient:
 
     def place_order(self, order_params: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Place an order using the Fusion Plus API.
+        Place an order using the 1inch API.
 
         Args:
             order_params (Dict[str, Any]): Parameters required to place an order.
@@ -119,8 +145,10 @@ class OneInchClient:
         Returns:
             Dict[str, Any]: Order confirmation or error information.
         """
-        url = f"{self.base_url}/{self.api_version}/{self.network_id}/orders"
-        headers = {'Content-Type': 'application/json'}
+        url = f"{self.base_url}/{self.network_id}/orders"
+
+        headers = self._get_headers()
+
         response = requests.post(url, json=order_params, headers=headers)
         if response.status_code == 200:
             return response.json()
@@ -137,8 +165,11 @@ class OneInchClient:
         Returns:
             Dict[str, Any]: Cancellation confirmation or error information.
         """
-        url = f"{self.base_url}/{self.api_version}/{self.network_id}/orders/{order_id}/cancel"
-        response = requests.post(url)
+        url = f"{self.base_url}/{self.network_id}/orders/{order_id}/cancel"
+
+        headers = self._get_headers()
+
+        response = requests.post(url, headers=headers)
         if response.status_code == 200:
             return response.json()
         else:
