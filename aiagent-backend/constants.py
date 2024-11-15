@@ -19,6 +19,8 @@ class InputValidationError(Exception):
 DEPLOY_TOKEN: Final[str] = "deploy_token"
 DEPLOY_NFT: Final[str] = "deploy_nft"
 FETCH_ACTIVE_ORDERS: Final[str] = "fetch_active_orders"
+SWAP_TOKENS: Final[str] = "swap_tokens"
+FETCH_QUOTE: Final[str] = "fetch_quote"
 
 # Agent
 AGENT_MODEL: Final[str] = "gpt-4o-mini"
