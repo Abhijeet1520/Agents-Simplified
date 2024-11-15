@@ -51,6 +51,7 @@ CDP_API_KEY_NAME= # Create an API key at https://portal.cdp.coinbase.com/project
 CDP_API_KEY_PRIVATE_KEY="" # Create an API key at https://portal.cdp.coinbase.com/projects/api-keys
 OPENAI_API_KEY= # Get an API key from OpenAI - https://platform.openai.com/docs/quickstart
 NETWORK_ID=base-sepolia
+ONEINCH_API_KEY=<your_1inch_api_key_here> # Add your 1inch API key here
 ```
 
 ## Installation
@@ -96,7 +97,7 @@ curl -X POST http://localhost:5000/api/chat \
 Retrieve a list of NFTs deployed by the agent:
 
 ```bash
-curl http://localhost:5000/nfts 
+curl http://localhost:5000/nfts
 ```
 
 Retrieve a list of ERC-20s deployed by the agent:

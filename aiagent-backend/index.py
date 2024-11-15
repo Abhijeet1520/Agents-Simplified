@@ -41,7 +41,7 @@ def chat():
     except Exception as e:
         app.logger.error(f"Unexpected error in chat endpoint: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred'}), 500
-    
+
 # Retrieve a list of tokens the agent has deployed
 @app.route("/tokens", methods=['GET'])
 def tokens():
@@ -51,7 +51,7 @@ def tokens():
     except Exception as e:
         app.logger.error(f"Unexpected error in tokens endpoint: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred'}), 500
-    
+
 # Retrieve a list of tokens the agent has deployed
 @app.route("/nfts", methods=['GET'])
 def nfts():
@@ -64,4 +64,3 @@ def nfts():
 
 if __name__ == "__main__":
     app.run()
-    

@@ -1,7 +1,8 @@
 import constants
-import re 
+import re
 from db.tokens import add_token
 from db.nfts import add_nft
+from agent.oneinch_actions.actions import fetch_active_orders
 
 def handle_agent_action(agent_action, content):
     """
@@ -18,3 +19,6 @@ def handle_agent_action(agent_action, content):
         address = re.search(r'0x[a-fA-F0-9]{40}', content).group()
         # Add NFT to database
         add_nft(address)
+    if agent_action == constants.FETCH_ACTIVE_ORDERS:
+        orders = fetch_active_orders()
+        print("Fetched active orders:", orders)
