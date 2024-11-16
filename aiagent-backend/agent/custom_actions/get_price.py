@@ -3,7 +3,7 @@ from typing import Any, Dict
 import os
 import json
 import dotenv
-from pythclient.pythclient import PythClient
+# from pythclient.pythclient import PythClient
 import asyncio
 
 dotenv.load_dotenv()
@@ -47,20 +47,27 @@ def get_price_from_pyth(price_feed_id: str, max_age_seconds: int, pyth_contract_
     expo = result[2]
     publishTime = result[3]
 
-    async def fetch_price():
-        async with PythClient() as client:
-            await client.refresh_all_prices()
-            price_account = client.price_accounts.get(price_feed_id)
-            if not price_account:
-                raise ValueError(f"Price feed {price_feed_id} not found.")
-            price_data = price_account.aggregate_price
-            return {
-                'price': price_data.price,
-                'conf': price_data.confidence_interval,
-                'expo': price_data.exponent,
-                'publishTime': price_data.publish_time
-            }
-    return asyncio.run(fetch_price())
+    return {
+        'price': price,
+        'conf': conf,
+        'expo': expo,
+        'publishTime': publishTime
+    }
+
+    # async def fetch_price():
+    #     async with PythClient() as client:
+    #         await client.refresh_all_prices()
+    #         price_account = client.price_accounts.get(price_feed_id)
+    #         if not price_account:
+    #             raise ValueError(f"Price feed {price_feed_id} not found.")
+    #         price_data = price_account.aggregate_price
+    #         return {
+    #             'price': price_data.price,
+    #             'conf': price_data.confidence_interval,
+    #             'expo': price_data.exponent,
+    #             'publishTime': price_data.publish_time
+    #         }
+    # return asyncio.run(fetch_price())
 
 if __name__ == "__main__":
     # Example usage

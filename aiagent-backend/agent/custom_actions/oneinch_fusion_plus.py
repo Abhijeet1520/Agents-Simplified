@@ -1,14 +1,23 @@
 from typing import Any, Dict
-from oneinch import OneInchClient
+from agent.custom_actions.oneinch.client import OneInchClient
 import os
 import json
 
 # Initialize OneInchClient
 client = OneInchClient()
 
-def swap_tokens(token_in_address: str, token_out_address: str, amount_in_wei: int, slippage: float) -> Dict[str, Any]:
+def swap_tokens(token_in_address: str, token_out_address: str, amount_in_wei: int, slippage: float = 100) -> Dict[str, Any]:
     """
-    Swap tokens using OneInchClient.
+    Execute a token swap using the 1inch Protocol.
+
+    Args:
+        token_in_address (str): The address of the token to swap from
+        token_out_address (str): The address of the token to swap to
+        amount_in_wei (int): The amount of input tokens in wei
+        slippage (float, optional): Maximum acceptable slippage where 100 = 1%. Defaults to 100.
+
+    Returns:
+        Dict[str, Any]: The swap transaction result or empty dict if failed
     """
     try:
         result = client.swap_tokens(token_in_address, token_out_address, amount_in_wei, slippage)
@@ -19,7 +28,15 @@ def swap_tokens(token_in_address: str, token_out_address: str, amount_in_wei: in
 
 def fetch_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
     """
-    Fetch quote details from the OneInchClient.
+    Fetch a quote for a token swap from 1inch.
+
+    Args:
+        from_token (str): The address of the token to swap from
+        to_token (str): The address of the token to swap to
+        amount (int): The amount of input tokens in wei
+
+    Returns:
+        Dict[str, Any]: The quote details or empty dict if failed
     """
     try:
         params = {
@@ -35,7 +52,10 @@ def fetch_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
 
 def fetch_active_orders() -> Dict[str, Any]:
     """
-    Fetch active orders from the OneInchClient.
+    Fetch active orders from 1inch Fusion Plus.
+
+    Returns:
+        Dict[str, Any]: Active orders information or empty dict if failed
     """
     try:
         orders = client.fetch_active_orders()
