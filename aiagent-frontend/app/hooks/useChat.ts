@@ -35,7 +35,7 @@ export default function useChat({
             input,
             conversation_id: conversationId || generateUUID(),
           }),
-          mode: 'cors',
+          mode: 'no-cors',
         });
 
         if (!response.ok) {

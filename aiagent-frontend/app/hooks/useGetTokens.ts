@@ -27,7 +27,7 @@ export default function useGetTokens({
         headers: {
           'Content-Type': 'application/json',
         },
-        mode: 'cors',
+        mode: 'no-cors',
       });
 
       if (!response.ok) {
