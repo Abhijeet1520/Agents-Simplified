@@ -10,7 +10,8 @@ from db.nfts import get_nfts
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app)
+# add cors to allow cross origin requests
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Setup SQLite tables
 setup()

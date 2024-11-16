@@ -1,5 +1,6 @@
 import os
 import requests
+import constants
 from typing import Any, Dict, List, Optional
 from web3 import Web3
 from eth_account import Account
@@ -37,7 +38,6 @@ class OneInchClient:
                 self.account = Account.create()
                 self.address = self.account.address
                 self.private_key = self.account.key.hex()
-                self._save_wallet_info()
             else:
                 self.account = Account.from_key(self.private_key)
                 self.address = self.account.address
@@ -64,12 +64,28 @@ class OneInchClient:
         Load wallet information from the database.
         """
         try:
-            wallet_info = get_wallet_info()
+            # Read wallet data from environment variable or database
+            wallet_id = os.getenv(constants.WALLET_ID_ENV_VAR)
+            wallet_seed = os.getenv(constants.WALLET_SEED_ENV_VAR)
+            wallet_info = json.loads(get_wallet_info()) if get_wallet_info() else None
+
+            # Configure CDP Agentkit Langchain Extension.
+            values = {}
+
+            # Load agent wallet information from database or environment variables
             if wallet_info:
-                self.address = wallet_info.get("wallet_id")
-                self.private_key = wallet_info.get("seed")
-                if self.private_key:
-                    self.account = Account.from_key(self.private_key)
+                wallet_id = wallet_info["wallet_id"]
+                wallet_seed = wallet_info["seed"]
+                self.address = wallet_info["default_address_id"]
+                self.private_key = wallet_seed
+                values = {"cdp_wallet_data": json.dumps({ "wallet_id": wallet_id, "seed": wallet_seed })}
+            elif wallet_id and wallet_seed:
+                self.address = wallet_id
+                self.private_key = wallet_seed
+                values = {"cdp_wallet_data": json.dumps({ "wallet_id": wallet_id, "seed": wallet_seed })}
+
+            if self.private_key:
+                self.account = Account.from_key(self.private_key)
                 print(f"Loaded wallet info for address: {self.address}")
             else:
                 print("No wallet info found in the database.")
