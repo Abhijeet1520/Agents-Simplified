@@ -68,6 +68,26 @@ poetry run python index.py
 
 This will start the Python backend server.
 
+## Running with Docker
+
+To build and run the Docker container:
+
+1. **Build the Docker image**:
+
+   ```bash
+   docker build -t agent-backend .
+   ```
+
+2. **Run the Docker container**:
+
+   ```bash
+   docker run -p 5000:5000 --env-file .env agent-backend
+   ```
+
+   This command maps port 5000 of the container to port 5000 on your host machine and passes the environment variables from the `.env` file.
+
+**Note**: Ensure your `.env` file is correctly configured with all necessary environment variables.
+
 ## Agent Wallet
 
 **Note**: when running your agent from the first time, the SDK will automatically generate a wallet for you. The wallet information will be logged to the console, and saved to the `wallets` table in the SQLite DB.

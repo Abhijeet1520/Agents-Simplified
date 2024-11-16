@@ -19,6 +19,7 @@ cdp-agentkit-core = "^0.0.3"
 flask-cors = "^5.0.0"
 1inch-py = "^2.0.3"
 requests = "^2.32.3"
+phidata = "^2.5.32"
 
 
 [build-system]
