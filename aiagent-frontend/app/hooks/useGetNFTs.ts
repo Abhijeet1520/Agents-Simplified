@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { Address } from 'viem';
+import axios from 'axios';
 import { API_URL } from '../config';
 
 type UseGetNFTsResponse = {
@@ -22,20 +23,13 @@ export default function useGetNFTs({
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/nfts`, {
-        method: 'GET',
+      const { data } = await axios.get(`${API_URL}/nfts`, {
         headers: {
           'Content-Type': 'application/json',
         },
-        mode: 'no-cors',
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-
-      const { nfts } = await response.json();
-
+      const { nfts } = data;
       onSuccess(nfts);
 
       return { nfts, error: null };

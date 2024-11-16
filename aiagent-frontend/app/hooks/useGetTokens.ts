@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { Address } from 'viem';
+import axios from 'axios';
 import { API_URL } from '../config';
 
 type UseGetTokensResponse = {
@@ -22,19 +23,13 @@ export default function useGetTokens({
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/tokens`, {
-        method: 'GET',
+      const { data } = await axios.get(`${API_URL}/tokens`, {
         headers: {
           'Content-Type': 'application/json',
         },
-        mode: 'no-cors',
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-
-      const { tokens } = await response.json();
+      const { tokens } = data;
       onSuccess?.(tokens);
       return { tokens, error: null };
     } catch (error) {

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import axios from 'axios';
 import { API_URL } from '../config';
 import type { AgentMessage } from '../types';
 import { generateUUID } from '../utils';
@@ -26,27 +27,24 @@ export default function useChat({
       setIsLoading(true);
 
       try {
-        const response = await fetch(`${API_URL}/api/chat`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        const { data } = await axios.post(
+          `${API_URL}/api/chat`,
+          {
             input,
             conversation_id: conversationId || generateUUID(),
-          }),
-          mode: 'no-cors',
-        });
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            responseType: 'text',
+          },
+        );
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
-
-        const text = await response.text();
-        const parsedMessages = text
+        const parsedMessages = data
           .trim()
           .split('\n')
-          .map((line) => {
+          .map((line: string) => {
             try {
               return JSON.parse(line);
             } catch (error) {
