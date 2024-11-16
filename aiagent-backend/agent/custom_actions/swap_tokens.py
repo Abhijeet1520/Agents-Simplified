@@ -4,7 +4,7 @@ import os
 import json
 import time
 import requests
-from oneinch_action import OneInchClient
+from oneinch import OneInchClient
 
 client = OneInchClient()
 
