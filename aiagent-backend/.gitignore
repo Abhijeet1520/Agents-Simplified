@@ -1,6 +1,7 @@
 .env
-
-/__pycache__
+.DS_Store
+__pycache__
+/__pycache__/
 /agent/__pycache__
 /db/__pycache__
 /agent/custom_Actions/__pycache__
