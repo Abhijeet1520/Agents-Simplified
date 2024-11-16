@@ -32,7 +32,7 @@ class OneInchClient:
             self.private_key = private_key or os.getenv("WALLET_PRIVATE_KEY")
 
             # Load wallet info from the database
-            self.load_wallet_info()
+            # self.load_wallet_info()
 
             if not self.private_key:
                 self.account = Account.create()
