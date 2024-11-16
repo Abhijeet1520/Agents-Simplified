@@ -1,9 +1,8 @@
 import constants
-import re
 import json
 from db.tokens import add_token
 from db.nfts import add_nft
-from agent.oneinch.actions import fetch_active_orders, swap_tokens, get_quote
+from agent.custom_actions.swap_tokens import swap_tokens, fetch_quote, fetch_active_orders
 
 def handle_agent_action(agent_action, content):
     """
@@ -27,15 +26,14 @@ def handle_agent_action(agent_action, content):
         params = json.loads(content)
         from_token = params.get('from_token')
         to_token = params.get('to_token')
-        amount = int(params.get('amount'))
-        recipient = params.get('recipient', client.account.address)
-        slippage = float(params.get('slippage', 1.0))
-        result = swap_tokens(from_token, to_token, amount, recipient, slippage)
+        amount = float(params.get('amount'))
+        slippage = float(params.get('slippage', 0.5))
+        result = swap_tokens(from_token, to_token, amount, slippage)
         print("Swap Tokens Result:", result)
     elif agent_action == constants.FETCH_QUOTE:
         params = json.loads(content)
         from_token = params.get('from_token')
         to_token = params.get('to_token')
-        amount = int(params.get('amount'))
-        quote = get_quote(from_token, to_token, amount)
+        amount = float(params.get('amount'))
+        quote = fetch_quote(from_token, to_token, amount)
         print("Fetched Quote:", quote)
