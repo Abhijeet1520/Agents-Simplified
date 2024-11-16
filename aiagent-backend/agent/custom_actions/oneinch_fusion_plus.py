@@ -1,20 +1,23 @@
 from typing import Any, Dict
-from .client import OneInchClient  # Ensure correct import
+from oneinch import OneInchClient
+import os
+import json
 
+# Initialize OneInchClient
 client = OneInchClient()
 
-def swap_tokens(from_token: str, to_token: str, amount: int, recipient: str, slippage: float = 100) -> Dict[str, Any]:
+def swap_tokens(token_in_address: str, token_out_address: str, amount_in_wei: int, slippage: float) -> Dict[str, Any]:
     """
     Swap tokens using OneInchClient.
     """
     try:
-        result = client.swap_tokens(from_token, to_token, amount, recipient, slippage)
+        result = client.swap_tokens(token_in_address, token_out_address, amount_in_wei, slippage)
         return result if result else {}
     except Exception as e:
-        print(f"Error in swap_tokens action: {e}")
+        print(f"Error in swap_tokens: {e}")
         return {}
 
-def get_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
+def fetch_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
     """
     Fetch quote details from the OneInchClient.
     """
@@ -27,7 +30,7 @@ def get_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
         quote = client.get_quote(params)
         return quote if quote else {}
     except Exception as e:
-        print(f"Error in get_quote action: {e}")
+        print(f"Error in fetch_quote: {e}")
         return {}
 
 def fetch_active_orders() -> Dict[str, Any]:
@@ -38,5 +41,5 @@ def fetch_active_orders() -> Dict[str, Any]:
         orders = client.fetch_active_orders()
         return orders if orders else {}
     except Exception as e:
-        print(f"Error in fetch_active_orders action: {e}")
+        print(f"Error in fetch_active_orders: {e}")
         return {}
