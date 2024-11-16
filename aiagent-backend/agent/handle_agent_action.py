@@ -3,6 +3,7 @@ import json
 from db.tokens import add_token
 from db.nfts import add_nft
 from agent.custom_actions.swap_tokens import swap_tokens, fetch_quote, fetch_active_orders
+from agent.custom_actions.get_price import get_price_from_pyth
 
 def handle_agent_action(agent_action, content):
     """
@@ -37,3 +38,9 @@ def handle_agent_action(agent_action, content):
         amount = float(params.get('amount'))
         quote = fetch_quote(from_token, to_token, amount)
         print("Fetched Quote:", quote)
+    elif agent_action == constants.GET_PRICE:
+        params = json.loads(content)
+        price_feed_id = params.get('price_feed_id')
+        max_age_seconds = int(params.get('max_age_seconds', 600))
+        price_data = get_price_from_pyth(price_feed_id, max_age_seconds)
+        print("Fetched Price Data:", price_data)
