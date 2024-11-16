@@ -27,7 +27,7 @@ class OneInchClient:
         else:
             # Generate a new account if no private key is provided
             self.account = Account.create()
-            self.private_key = self.account.private_key.hex()
+            self.private_key = self.account.key
 
     def _get_headers(self) -> Dict[str, str]:
         """

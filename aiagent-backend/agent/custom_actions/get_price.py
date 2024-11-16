@@ -8,7 +8,7 @@ import asyncio
 
 dotenv.load_dotenv()
 
-def get_price_from_pyth(price_feed_id: str, max_age_seconds: int) -> Dict[str, Any]:
+def get_price_from_pyth(price_feed_id: str, max_age_seconds: int, pyth_contract_address:str = '0x8250f4aF4B972684F7b336503E2D6dFeDeB1487a', web3_provider_url: str = 'https://mainnet.base.org') -> Dict[str, Any]:
     """
     Fetch the latest price from the Pyth contract using getPriceNoOlderThan.
 
@@ -19,11 +19,6 @@ def get_price_from_pyth(price_feed_id: str, max_age_seconds: int) -> Dict[str, A
     Returns:
         Dict[str, Any]: A dictionary containing price, conf, expo, and publishTime.
     """
-    # Connect to the network (e.g., Base Mainnet)
-    pyth_contract_address = '0x8250f4aF4B972684F7b336503E2D6dFeDeB1487a'  # Pyth contract address on Base
-    web3_provider_url = os.getenv("WEB3_PROVIDER_URL")  # Ensure this is set in your environment
-    if not web3_provider_url:
-        raise ValueError("WEB3_PROVIDER_URL environment variable not set.")
     w3 = Web3(Web3.HTTPProvider(web3_provider_url))
 
     # Check connection
