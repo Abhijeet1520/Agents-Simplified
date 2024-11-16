@@ -11,7 +11,9 @@ from cdp_langchain.utils import CdpAgentkitWrapper
 
 from db.wallet import add_wallet_info, get_wallet_info
 from agent.custom_actions.get_latest_block import get_latest_block
-from oneinch.actions import fetch_active_orders, swap_tokens, get_quote
+from agent.custom_actions.get_price import get_price_from_pyth
+from agent.custom_actions.oneinch_fusion_plus import swap_tokens, fetch_quote, fetch_active_orders
+
 
 def initialize_agent():
     """Initialize the agent with CDP Agentkit."""
@@ -45,7 +47,15 @@ def initialize_agent():
 
     # Initialize CDP Agentkit Toolkit and get tools.
     cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
-    tools = cdp_toolkit.get_tools() + [get_latest_block, fetch_active_orders, swap_tokens, get_quote]
+    tools = cdp_toolkit.get_tools() + [
+        get_latest_block,
+
+        fetch_quote,
+        fetch_active_orders,
+        swap_tokens,
+
+        get_price_from_pyth,
+    ]
 
     # Store buffered conversation history in memory.
     memory = MemorySaver()

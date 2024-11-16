@@ -1,7 +1,5 @@
 from typing import Any, Dict
 from agent.custom_actions.oneinch.client import OneInchClient
-import os
-import json
 
 # Initialize OneInchClient
 client = OneInchClient()
