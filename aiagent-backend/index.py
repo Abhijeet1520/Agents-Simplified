@@ -63,5 +63,11 @@ def nfts():
         app.logger.error(f"Unexpected error in nfts endpoint: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred'}), 500
 
+
+@app.route("/", methods=["GET"])
+def index():
+    return "AI Agent Backend"
+
+
 if __name__ == "__main__":
     app.run()
