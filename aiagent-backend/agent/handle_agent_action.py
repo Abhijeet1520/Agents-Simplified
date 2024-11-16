@@ -38,7 +38,7 @@ def handle_agent_action(agent_action, content):
             from_token = params.get('from_token')
             to_token = params.get('to_token')
             amount = float(params.get('amount'))
-            slippage = float(params.get('slippage', 0.5))
+            slippage = float(params.get('slippage', 100))
             result = swap_tokens(from_token, to_token, amount, slippage)
             print("Swap Tokens Result:", result)
         except Exception as e:

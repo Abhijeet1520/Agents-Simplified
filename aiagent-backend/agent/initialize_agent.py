@@ -11,7 +11,7 @@ from cdp_langchain.utils import CdpAgentkitWrapper
 
 from db.wallet import add_wallet_info, get_wallet_info
 from agent.custom_actions.get_latest_block import get_latest_block
-from agent.oneinch.actions import fetch_active_orders, swap_tokens, get_quote
+from agent.custom_actions.oneinch.actions import fetch_active_orders, swap_tokens, get_quote
 
 def initialize_agent():
     """Initialize the agent with CDP Agentkit."""

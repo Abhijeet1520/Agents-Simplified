@@ -122,4 +122,27 @@ class OneInchClient:
         else:
             raise Exception(f"Failed to get order secrets: {response.status_code} {response.text}")
 
-    # Add other methods as needed, following the same pattern.
+    def swap_tokens(self, token_in_address: str, token_out_address: str, amount_in_wei: int, recipient: str,slippage: float) -> Optional[Dict[str, Any]]:
+        try:
+            # Swap tokens logic
+            return {}
+            # return self.swap_tokens(token_in_address, token_out_address, amount_in_wei, recipient, slippage)
+        except Exception as e:
+            print(f"Error swapping tokens: {e}")
+            return None
+
+    def get_quote(self, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        try:
+            return {}
+            # return self.get_quote(params)
+        except Exception as e:
+            print(f"Error fetching quote: {e}")
+            return None
+
+    def fetch_active_orders(self) -> Optional[Dict[str, Any]]:
+        try:
+            return {}
+            # return self.fetch_active_orders()
+        except Exception as e:
+            print(f"Error fetching active orders: {e}")
+            return None
