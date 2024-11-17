@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from agent.custom_actions.oneinch.client import OneInchClient
+from oneinch.client import OneInchClient
 
 # Initialize OneInchClient
 client = OneInchClient()
