@@ -24,25 +24,18 @@ def swap_tokens(token_in_address: str, token_out_address: str, amount_in_wei: in
         print(f"Error in swap_tokens: {e}")
         return {}
 
-def fetch_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
+def fetch_quote(src_chain: int, dst_chain: int, from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
     """
     Fetch a quote for a token swap from 1inch.
-
-    Args:
-        from_token (str): The address of the token to swap from
-        to_token (str): The address of the token to swap to
-        amount (int): The amount of input tokens in wei
-
-    Returns:
-        Dict[str, Any]: The quote details or empty dict if failed
     """
     try:
-        params = {
-            "from_token": from_token,
-            "to_token": to_token,
-            "amount": amount
-        }
-        quote = client.get_quote(params)
+        quote = client.get_quote(
+            src_chain=src_chain,
+            dst_chain=dst_chain,
+            from_token=from_token,
+            to_token=to_token,
+            amount=amount
+        )
         return quote if quote else {}
     except Exception as e:
         print(f"Error in fetch_quote: {e}")

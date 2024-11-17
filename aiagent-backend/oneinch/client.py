@@ -122,21 +122,25 @@ class OneInchClient:
             print(f"Signing error: {e}")
             return ""
 
-    def get_quote(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def get_quote(self, src_chain: int, dst_chain: int, from_token: str, to_token: str, amount: int, enable_estimate: bool = True) -> Dict[str, Any]:
         """
-        Get a quote for token swap.
+        Get quote details based on input data.
         """
         try:
-            url = f"{self.fusion_plus_url}/quote/{self.api_version}"
-            response = requests.post(
+            url = f"{self.fusion_plus_url}/quoter/{self.api_version}/quote/receive"
+            params = {
+                "srcChain": src_chain,
+                "dstChain": dst_chain,
+                "srcTokenAddress": from_token,
+                "dstTokenAddress": to_token,
+                "amount": str(amount),
+                "walletAddress": self.address,
+                "enableEstimate": str(enable_estimate).lower()
+            }
+            response = requests.get(
                 url,
                 headers=self._get_headers(),
-                json={
-                    "fromTokenAddress": params.get("from_token"),
-                    "toTokenAddress": params.get("to_token"),
-                    "amount": str(params.get("amount")),
-                    "walletAddress": self.address
-                }
+                params=params
             )
             return response.json() if response.ok else {}
         except Exception as e:

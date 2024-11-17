@@ -67,6 +67,8 @@ def handle_agent_action(agent_action: str, content: str) -> None:
         try:
             params = json.loads(content)
             quote = fetch_quote(
+                src_chain=int(params.get('src_chain')),
+                dst_chain=int(params.get('dst_chain')),
                 from_token=params.get('from_token'),
                 to_token=params.get('to_token'),
                 amount=int(params.get('amount'))

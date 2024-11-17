@@ -16,17 +16,18 @@ def swap_tokens(from_token: str, to_token: str, amount: int, recipient: str, sli
         print(f"Error in swap_tokens action: {e}")
         return {}
 
-def get_quote(from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
+def get_quote(src_chain: int, dst_chain: int, from_token: str, to_token: str, amount: int) -> Dict[str, Any]:
     """
     Fetch quote details from the OneInchClient.
     """
     try:
-        params = {
-            "from_token": from_token,
-            "to_token": to_token,
-            "amount": amount
-        }
-        quote = client.get_quote(params)
+        quote = client.get_quote(
+            src_chain=src_chain,
+            dst_chain=dst_chain,
+            from_token=from_token,
+            to_token=to_token,
+            amount=amount
+        )
         return quote if quote else {}
     except Exception as e:
         print(f"Error in get_quote action: {e}")
